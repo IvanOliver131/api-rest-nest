@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
 import { Book } from 'src/models/book.model';
 import { BookService } from 'src/services/book.service';
+import express, {Request, Response} from 'express';
 
 @Controller('books')
 export class BookController {
@@ -28,10 +29,38 @@ export class BookController {
   }
 
   @Put(':id')
-  async updateBook(@Body() book): Promise<[number, Book[]]> {
-    const bookUpdated = await this.bookService.updateBook(book); 
+  async updateBook(@Param() params, @Body() book, @Res() res: Response): Promise<any> {
+    try {
+      const idBook = params.id;
+      const searchBook: Book = await this.bookService.listOneBook(idBook);
 
-    return bookUpdated;
+      if (searchBook) {
+        const bookUpdated = await this.bookService.updateBook(idBook, book); 
+        
+        return res.status(HttpStatus.OK).json({
+          statusCode: 200,
+          body: {
+            message: `Book be updated `,
+            newDates: bookUpdated
+          }
+        });
+      } 
+
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 400,
+        body: {
+          message: "Error at update book"
+        }
+      });
+    } catch (error) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 400,
+        body: {
+          message: "Error at update book"
+        }
+      })
+    }
+    
   }
 
   @Delete(':id')

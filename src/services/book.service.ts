@@ -23,16 +23,18 @@ export class BookService {
     return book;
   }
 
-  async updateBook(book: Book): Promise<[number, Book[]]> {
-    return this.bookModel.update(book, {
+  async updateBook(idBook: number, book: Book) {
+    this.bookModel.update(book, {
       where: {
-        id: book.id
+        id: idBook
       }
     });
+
+    return book;
   }
 
   async deleteBook(id: number) {
-    const book: Book = await this.listOneBook(id);
-    book.destroy();
+    const bookDeleted: Book = await this.listOneBook(id);
+    bookDeleted.destroy();
   }
 }
