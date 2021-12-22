@@ -1,10 +1,10 @@
-export class Product {
+export class Book {
   id: number;
   code: string;
   name: string;
   price: number;
 
-  constructor(response: Product) {
+  constructor(response: Book) {
     Object.assign(this, response);
 
     // this.code = code;
