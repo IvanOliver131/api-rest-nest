@@ -4,10 +4,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Book } from './models/book.model';
 import { BookModule } from './modules/book.module';
-import 'dotenv/config'
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    BookModule,
+    ConfigModule.forRoot(),
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: process.env.HOST_ENV,
@@ -18,8 +20,7 @@ import 'dotenv/config'
       autoLoadModels: true,
       synchronize: true
     }),
-    SequelizeModule.forFeature([Book]),
-    BookModule    
+    SequelizeModule.forFeature([Book])   
   ],
   controllers: [
     AppController, 

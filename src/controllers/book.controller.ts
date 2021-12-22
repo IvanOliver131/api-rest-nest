@@ -7,36 +7,36 @@ export class BookController {
   constructor(private bookService: BookService){}
 
   @Get()
-  listAllBooks(): Book[] {
-    const listBooks = this.bookService.listAllBooks();
+  async listAllBooks(): Promise<Book[]> {
+    const listBooks = await this.bookService.listAllBooks();
 
     return listBooks;
   }
 
   @Get(':id')
-  listOneBook(@Param() params): Book {
-    const listBook = this.bookService.listOneBook(params.id); 
+  async listOneBook(@Param() params): Promise<Book> {
+    const listBook = await this.bookService.listOneBook(params.id); 
 
     return listBook;
   }
 
   @Post()
-  createBook(@Body() book): Book {
-    const bookCreated = this.bookService.createBook(book); 
+  async createBook(@Body() book): Promise<Book> {
+    const bookCreated = await this.bookService.createBook(book); 
 
     return bookCreated;
   }
 
   @Put(':id')
-  updateBook(@Body() book): Book {
-    const bookUpdated = this.bookService.updateBook(book); 
+  async updateBook(@Body() book): Promise<[number, Book[]]> {
+    const bookUpdated = await this.bookService.updateBook(book); 
 
     return bookUpdated;
   }
 
   @Delete(':id')
-  deleteBook(@Param() params): Object {
-    const bookDeleted = this.bookService.deleteBook(params.id);
+  async deleteBook(@Param() params) {
+    const bookDeleted = await this.bookService.deleteBook(params.id);
 
     return bookDeleted;
   }
