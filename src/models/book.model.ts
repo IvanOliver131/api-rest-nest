@@ -1,14 +1,25 @@
-export class Book {
-  id: number;
+import { Column, Table, Model, DataType } from "sequelize-typescript";
+
+@Table
+export class Book extends Model<Book> {
+  // Já intera o ID
+  // id: number;
+
+  @Column({
+    type: DataType.STRING(60),
+    allowNull: false
+  })
   code: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false
+  })
   name: string;
+
+  @Column({
+    type: DataType.FLOAT,
+    allowNull: false
+  })
   price: number;
-
-  constructor(response: Book) {
-    Object.assign(this, response);
-
-    // this.code = code;
-    // this.name = name;
-    // this.price = price;
-  }
 }
