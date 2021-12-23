@@ -5,9 +5,12 @@ import { AppService } from './app.service';
 import { Book } from './models/book.model';
 import { BookModule } from './modules/book.module';
 import { ConfigModule } from '@nestjs/config';
+import { User } from './models/user.model';
+import { UserModule } from './modules/user.module';
 
 @Module({
   imports: [
+    UserModule,
     BookModule,
     ConfigModule.forRoot(),
     SequelizeModule.forRoot({
@@ -20,7 +23,7 @@ import { ConfigModule } from '@nestjs/config';
       autoLoadModels: true,
       synchronize: true
     }),
-    SequelizeModule.forFeature([Book])   
+    SequelizeModule.forFeature([Book, User])   
   ],
   controllers: [
     AppController, 

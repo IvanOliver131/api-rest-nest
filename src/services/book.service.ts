@@ -10,31 +10,53 @@ export class BookService {
   ) {}
 
   async listAllBooks(): Promise<Book[]> {
-    return this.bookModel.findAll();
+    try {
+      const listBooks = this.bookModel.findAll();
+
+      return listBooks;
+    } catch (error) {
+      return error;
+    }
   }
 
   async listOneBook(id: number): Promise<Book> {
-    return this.bookModel.findByPk(id);
+    try {
+      return this.bookModel.findByPk(id);
+    } catch (error) {
+      return error;
+    }
   }
 
   async createBook(book: Book): Promise<Book> {
-    this.bookModel.create(book);
+    try {
+      const bookCreated = this.bookModel.create(book);
 
-    return book;
+      return bookCreated;
+    } catch (error) {
+      return error;
+    } 
   }
 
   async updateBook(idBook: number, book: Book) {
-    this.bookModel.update(book, {
-      where: {
-        id: idBook
-      }
-    });
-
-    return book;
+    try {
+      this.bookModel.update(book, {
+        where: {
+          id: idBook
+        }
+      });
+  
+      return book;
+    } catch (error) {
+      return error;
+    }
   }
 
   async deleteBook(id: number) {
-    const bookDeleted: Book = await this.listOneBook(id);
-    bookDeleted.destroy();
+    try {
+      const bookDeleted: Book = await this.listOneBook(id);
+      return bookDeleted.destroy();
+    } catch (error){
+      return error;
+    }
   }
 }

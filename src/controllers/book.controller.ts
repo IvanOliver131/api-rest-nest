@@ -9,23 +9,35 @@ export class BookController {
 
   @Get()
   async listAllBooks(): Promise<Book[]> {
-    const listBooks = await this.bookService.listAllBooks();
+    try {
+      const listBooks = await this.bookService.listAllBooks();
 
-    return listBooks;
+      return listBooks;
+    } catch (error) {
+      return error;
+    }
   }
 
   @Get(':id')
   async listOneBook(@Param() params): Promise<Book> {
-    const listBook = await this.bookService.listOneBook(params.id); 
+    try {
+      const listBook = await this.bookService.listOneBook(params.id); 
 
-    return listBook;
+      return listBook;
+    } catch (error) {
+      return error;
+    }
   }
 
   @Post()
   async createBook(@Body() book): Promise<Book> {
-    const bookCreated = await this.bookService.createBook(book); 
+    try {
+      const bookCreated = await this.bookService.createBook(book); 
 
-    return bookCreated;
+      return bookCreated;
+    } catch (error) {
+      return error;
+    }  
   }
 
   @Put(':id')
@@ -40,23 +52,23 @@ export class BookController {
         return res.status(HttpStatus.OK).json({
           statusCode: 200,
           body: {
-            message: `Book be updated `,
-            newDates: bookUpdated
+            message: `Book updated `,
+            newData: bookUpdated
           }
         });
       } 
 
       return res.status(HttpStatus.BAD_REQUEST).json({
-        statusCode: 400,
+        statusCode: 404,
         body: {
-          message: "Error at update book"
+          message: "Error update book."
         }
       });
     } catch (error) {
       return res.status(HttpStatus.BAD_REQUEST).json({
-        statusCode: 400,
+        statusCode: 404,
         body: {
-          message: "Error at update book"
+          message: "Error update book"
         }
       })
     }
@@ -64,9 +76,24 @@ export class BookController {
   }
 
   @Delete(':id')
-  async deleteBook(@Param() params) {
-    const bookDeleted = await this.bookService.deleteBook(params.id);
+  async deleteBook(@Param() params, @Res() res: Response) {
+    try {
+      const bookDeleted = await this.bookService.deleteBook(params.id);
 
-    return bookDeleted;
+      return res.status(HttpStatus.OK).json({
+        statusCode: 200,
+        body: {
+          message: "Book deleted",
+          newData: bookDeleted
+        }
+      });
+    } catch (error) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 404,
+        body: {
+          message: "Error delete book."
+        }
+      });
+    }
   }
 }
