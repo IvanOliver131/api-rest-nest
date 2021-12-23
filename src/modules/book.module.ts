@@ -9,6 +9,7 @@ import { BookService } from "src/services/book.service";
     SequelizeModule.forFeature([Book])
   ],
   controllers: [BookController],
-  providers: [BookService]
+  providers: [BookService],
+  exports: [BookService]
 })
 export class BookModule {}

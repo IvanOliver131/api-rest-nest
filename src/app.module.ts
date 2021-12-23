@@ -1,3 +1,4 @@
+import { TokenModule } from './modules/token.module';
 import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize/dist/sequelize.module';
@@ -8,9 +9,11 @@ import { BookModule } from './modules/book.module';
 import { ConfigModule } from '@nestjs/config';
 import { User } from './models/user.model';
 import { UserModule } from './modules/user.module';
+import { Token } from './token/token.entity';
 
 @Module({
   imports: [
+    TokenModule,
     AuthModule,
     UserModule,
     BookModule,
@@ -25,7 +28,7 @@ import { UserModule } from './modules/user.module';
       autoLoadModels: true,
       synchronize: true,
     }),
-    SequelizeModule.forFeature([Book, User])
+    SequelizeModule.forFeature([Book, User, Token])
   ],
   controllers: [
     AppController,

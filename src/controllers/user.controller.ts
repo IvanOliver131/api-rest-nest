@@ -31,8 +31,16 @@ export class UserController {
     try {
       const idUser = params.id
       const user = await this.userService.listOneUser(idUser);
-    
-      return res.status(HttpStatus.OK).json(user);
+      const userReturn = {
+        id: user.id ,
+        username: user.username,
+        email: user.email,
+        name: user.name,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
+      }
+
+      return res.status(HttpStatus.OK).json(userReturn);
     } catch (error) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         statusCode: 404,
@@ -48,8 +56,16 @@ export class UserController {
   async createUser(@Body() user, @Res() res: Response): Promise<Response> {
     try {
       const userCreated = await this.userService.createUser(user); 
+      const userReturn = {
+        id: userCreated.id ,
+        username: userCreated.username,
+        email: userCreated.email,
+        name: userCreated.name,
+        createdAt: userCreated.createdAt,
+        updatedAt: userCreated.updatedAt
+      }
 
-      return res.status(HttpStatus.OK).json(userCreated);
+      return res.status(HttpStatus.OK).json(userReturn);
     } catch (error) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         statusCode: 404,
@@ -60,6 +76,7 @@ export class UserController {
     }    
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async updateUser(@Param() params, @Body() user: User, @Res() res: Response): Promise<Response> {
     try {
@@ -68,12 +85,20 @@ export class UserController {
 
       if (searchUser) {
         const userUpdated = await this.userService.updateUser(idUser, user);
-        
+        const userReturn = {
+          id: userUpdated.id ,
+          username: userUpdated.username,
+          email: userUpdated.email,
+          name: userUpdated.name,
+          createdAt: userUpdated.createdAt,
+          updatedAt: userUpdated.updatedAt
+        }
+
         return res.status(HttpStatus.OK).json({
           statusCode: 200,
           body: {
             message: "User updated.",
-            newData: userUpdated
+            newData: userReturn
           }
         });
       }
@@ -103,12 +128,20 @@ export class UserController {
 
       if (searchUser) {
         const userDeleted = await this.userService.deleteUser(params.id);
+        const userReturn = {
+          id: userDeleted.id ,
+          username: userDeleted.username,
+          email: userDeleted.email,
+          name: userDeleted.name,
+          createdAt: userDeleted.createdAt,
+          updatedAt: userDeleted.updatedAt
+        }
 
         return res.status(HttpStatus.OK).json({
           statusCode: 200,
           body: {
             message: "User deleted",
-            newData: userDeleted
+            newData: userReturn
           }
         });
       }
