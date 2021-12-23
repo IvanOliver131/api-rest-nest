@@ -11,7 +11,7 @@ export class UserService {
 
   async listAllUsers(): Promise<User[]> {
     try {
-      const listUsers = this.userModel.findAll();
+      const listUsers = await this.userModel.findAll();
 
       return listUsers;
     } catch (error) {
@@ -21,7 +21,19 @@ export class UserService {
 
   async listOneUser(id: number): Promise<User> {
     try {
-      return this.userModel.findByPk(id);
+      return await this.userModel.findByPk(id);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getByEmail(email: string): Promise<User> {
+    try {
+      return await this.userModel.findOne({
+        where: { 
+          email: email 
+        }
+      });
     } catch (error) {
       return error;
     }
@@ -29,7 +41,7 @@ export class UserService {
 
   async createUser(user: User): Promise<User> {
     try {
-      const userCreated = this.userModel.create(user);
+      const userCreated = await this.userModel.create(user);
     
       return userCreated;
     } catch (error) {
@@ -39,13 +51,16 @@ export class UserService {
 
   async updateUser(idUser: number, user: User) {
     try {
-      this.userModel.update(user, {
+      await this.userModel.update(user, {
         where: {
           id: idUser
-        }
+        },
+        individualHooks: true
       });
 
-      return user;
+      const userUpdate = await this.listOneUser(idUser);
+
+      return userUpdate;
     } catch (error) {
       return error;
     }    
@@ -55,7 +70,7 @@ export class UserService {
     try {
       const userDeleted: User = await this.listOneUser(id);
       
-      return userDeleted.destroy();
+      return await userDeleted.destroy();
     } catch (error) {
       return error;
     }

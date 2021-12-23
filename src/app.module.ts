@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize/dist/sequelize.module';
 import { AppController } from './app.controller';
@@ -10,6 +11,7 @@ import { UserModule } from './modules/user.module';
 
 @Module({
   imports: [
+    AuthModule,
     UserModule,
     BookModule,
     ConfigModule.forRoot(),
@@ -21,15 +23,15 @@ import { UserModule } from './modules/user.module';
       password: process.env.PASSWORD_ENV,
       database: process.env.DATABASE_ENV,
       autoLoadModels: true,
-      synchronize: true
+      synchronize: true,
     }),
-    SequelizeModule.forFeature([Book, User])   
+    SequelizeModule.forFeature([Book, User])
   ],
   controllers: [
-    AppController, 
+    AppController,
   ],
   providers: [
     AppService,
   ],
 })
-export class AppModule {}
+export class AppModule { }
