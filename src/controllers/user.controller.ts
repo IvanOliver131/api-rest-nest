@@ -23,6 +23,23 @@ export class UserController {
     }
   }
 
+  @Get(':id')
+  async listOneUser(@Param() params, @Res() res: Response): Promise<Response> {
+    try {
+      const idUser = params.id
+      const user = await this.userService.listOneUser(idUser);
+    
+      return res.status(HttpStatus.OK).json(user);
+    } catch (error) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 404,
+        body: {
+          message: "Error list user."
+        }
+      });
+    }
+  }
+
   @Post()
   async createUser(@Body() user, @Res() res: Response): Promise<Response> {
     try {
@@ -67,7 +84,7 @@ export class UserController {
       return res.status(HttpStatus.BAD_REQUEST).json({
         statusCode: 404,
         body: {
-          message: "Error update user."
+          message: "User not found."
         }
       });
     }
@@ -76,13 +93,25 @@ export class UserController {
   @Delete(':id')
   async deleteUser(@Param() params, @Res() res: Response): Promise<Response> {
     try {
-      const userDeleted = await this.userService.deleteUser(params.id);
+      const idUser = params.id;
+      const searchUser: User = await this.userService.listOneUser(idUser);
 
-      return res.status(HttpStatus.OK).json({
-        statusCode: 200,
+      if (searchUser) {
+        const userDeleted = await this.userService.deleteUser(params.id);
+
+        return res.status(HttpStatus.OK).json({
+          statusCode: 200,
+          body: {
+            message: "User deleted",
+            newData: userDeleted
+          }
+        });
+      }
+
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        statusCode: 404,
         body: {
-          message: "User deleted",
-          newData: userDeleted
+          message: "User not found."
         }
       });
     } catch (error) {

@@ -61,7 +61,7 @@ export class BookController {
       return res.status(HttpStatus.BAD_REQUEST).json({
         statusCode: 404,
         body: {
-          message: "Error update book."
+          message: "Book not found."
         }
       });
     } catch (error) {
@@ -78,13 +78,25 @@ export class BookController {
   @Delete(':id')
   async deleteBook(@Param() params, @Res() res: Response) {
     try {
-      const bookDeleted = await this.bookService.deleteBook(params.id);
+      const idBook = params.id;
+      const searchBook: Book = await this.bookService.listOneBook(idBook);
+
+      if (searchBook) {
+        const bookDeleted = await this.bookService.deleteBook(params.id);
+
+        return res.status(HttpStatus.OK).json({
+          statusCode: 200,
+          body: {
+            message: "Book deleted",
+            newData: bookDeleted
+          }
+        });
+      }
 
       return res.status(HttpStatus.OK).json({
-        statusCode: 200,
+        statusCode: 404,
         body: {
-          message: "Book deleted",
-          newData: bookDeleted
+          message: "Book not found",
         }
       });
     } catch (error) {
