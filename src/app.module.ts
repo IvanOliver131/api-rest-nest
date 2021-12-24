@@ -1,5 +1,5 @@
 import { TokenModule } from './modules/token.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth.module';
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize/dist/sequelize.module';
 import { AppController } from './app.controller';
@@ -13,7 +13,7 @@ import { Token } from './token/token.entity';
 
 @Module({
   imports: [
-    TokenModule,
+    // TokenModule,
     AuthModule,
     UserModule,
     BookModule,

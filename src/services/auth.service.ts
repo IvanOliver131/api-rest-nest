@@ -15,7 +15,7 @@ export class AuthService {
   async validateUser(userEmail: string, userPassword: string) {
     const user = await (await this.userService.getByEmail(userEmail));
     const isValidPassword = await bcrypt.compare(userPassword, user.password);
-
+    
     if (user && isValidPassword) {
       const { id, username, name, email } = user;
 
@@ -35,8 +35,15 @@ export class AuthService {
     
     this.tokenService.saveToken(tokenFormat);
     
+    const userReturn = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+    }
+
     return {
-      user,
+      userReturn,
       access_token: token,
     };
   }

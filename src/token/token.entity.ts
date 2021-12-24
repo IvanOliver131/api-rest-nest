@@ -13,6 +13,5 @@ export class Token extends Model<Token>{
     type: DataType.STRING,
     allowNull: false
   })
-  email: string
-
+  email: string;
 }
