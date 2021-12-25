@@ -13,7 +13,7 @@ import { Token } from './token/token.entity';
 
 @Module({
   imports: [
-    // TokenModule,
+    TokenModule,
     AuthModule,
     UserModule,
     BookModule,
